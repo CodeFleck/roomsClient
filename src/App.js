@@ -3,15 +3,15 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AuthService from "./services/auth.service";
+import AuthService from "./services/AuthService";
 
-import Login from "./components/login.component";
-import Register from "./components/register.component";
-import Home from "./components/home.component";
-import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardModerator from "./components/board-moderator.component";
-import BoardAdmin from "./components/board-admin.component";
+import Login from "./components/LoginComponent";
+import Register from "./components/RegisterComponent";
+import Home from "./components/HomeComponent";
+import Profile from "./components/ProfileComponent";
+import BoardUser from "./components/BoardUserComponent";
+import BoardModerator from "./components/BoardModeratorComponent";
+import BoardAdmin from "./components/BoardAdminComponent";
 
 class App extends Component {
   constructor(props) {
