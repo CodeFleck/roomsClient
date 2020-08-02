@@ -41,9 +41,7 @@ export default class ManagementComponent extends Component {
   };
 
 
-  newInputChangeHandler = (event, type) => {
-    console.log("NEW INPUT CHANGE HANDLER....");
-  };
+
 
   addItemHandler = () => {
     console.log("GRAVANDO NOVO PROFISSIONAL....");
@@ -72,7 +70,6 @@ export default class ManagementComponent extends Component {
         <ProfessionalTable
           professionals={this.state.professionals}
           addItemHandler={this.addItemHandler}
-          newInput={this.newInputChangeHandler}
           delete={this.deleteItemHandler}
           change={this.changeClickItemHandler}
           changeEdit={this.changeEditInputHandler}
