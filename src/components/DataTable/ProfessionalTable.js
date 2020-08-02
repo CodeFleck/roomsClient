@@ -159,7 +159,7 @@ const ProfessionalTable = (props) => {
                         variant="text"
                         color="primary"
                         className={classes.Button}
-                        onClick={() => props.delete(item.id)}
+                        onClick={() => {props.delete(item.id)}}
                       >
                         <DeleteIcon />
                       </Button>

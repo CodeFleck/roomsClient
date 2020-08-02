@@ -1,9 +1,4 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Switch from "@material-ui/core/Switch";
-import Checkbox from "@material-ui/core/Checkbox";
 import ProfessionalService from "../services/ProfessionalService";
 import ProfessionalTable from "./DataTable/ProfessionalTable";
 import "./ManagementComponent.css";
@@ -11,10 +6,8 @@ import "./ManagementComponent.css";
 export default class ManagementComponent extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       professionals: [],
-
     };
   }
 
@@ -30,13 +23,23 @@ export default class ManagementComponent extends Component {
       .catch((err) => console.log(err));
   }
 
+  deleteItemHandler = id => {
+    const { professionals } = this.state
+
+        const professionalAtualizado = professionals.filter(professional => {
+            return professional.id !== id
+        })
+        ProfessionalService.deleteProfessional(id)
+            .then(res => {
+                    this.setState({ professionals: [...professionalAtualizado] })
+            })
+            .catch(err => console.log(err))
+  };
+
   handleSpecialRoomChange = (event) => {
     // setChecked(event.target.checked);
   };
 
-  deleteItemHandler = (itemIndex) => {
-    console.log("deleteing..." + itemIndex)
-  };
 
   newInputChangeHandler = (event, type) => {
     console.log("NEW INPUT CHANGE HANDLER....");
@@ -44,6 +47,7 @@ export default class ManagementComponent extends Component {
 
   addItemHandler = () => {
     console.log("GRAVANDO NOVO PROFISSIONAL....");
+    
   };
 
   changeClickItemHandler = (index) => {

@@ -9,18 +9,22 @@ const ProfessionalService = {
     .catch( error => {
       console.log(error);
     })
-  } 
+  }, 
 
+  deleteProfessional: id => {
+    return axios.delete(API_URL, { id: id }, { headers: authHeader() })
+    .catch( error => {
+      console.log(error);
+    })
+  },
 
+  createProfessional : professional => {
+    return axios.post(API_URL, professional ,{ headers: authHeader() })
+    .catch( error => {
+      console.log(error);
+    })
+  }
 
-// const ProfessionalService = {
-//   getAllProfessionals: () => {
-//     return fetch(API_URL, { headers: authHeader() }).then((response) => {
-//       response.json().then((data) => {
-//         console.log(data);
-//       });
-//     });
-//   },
 
   //   CriaAutor : autor => {
   //     return fetch('http://localhost:8000/api/autor', {method: 'POST', headers: {'content-type': 'application/json'}, body: autor})
