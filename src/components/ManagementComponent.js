@@ -2,51 +2,14 @@ import React, { Component } from "react";
 import ProfessionalService from "../services/ProfessionalService";
 import ProfessionalTable from "./DataTable/ProfessionalTable";
 import "./ManagementComponent.css";
+import { ThemeProvider } from "@material-ui/core";
 
 export default class ManagementComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      professionals: [],
     };
   }
-
-  componentDidMount() {
-    ProfessionalService.getAllProfessionals()
-      .then((res) => {
-        if (res.status === 200) {
-          this.setState({
-            professionals: [...this.state.professionals, ...res.data],
-          });
-        }
-      })
-      .catch((err) => console.log(err));
-  }
-
-  deleteItemHandler = id => {
-    const { professionals } = this.state
-
-        const professionalAtualizado = professionals.filter(professional => {
-            return professional.id !== id
-        })
-        ProfessionalService.deleteProfessional(id)
-            .then(res => {
-                    this.setState({ professionals: [...professionalAtualizado] })
-            })
-            .catch(err => console.log(err))
-  };
-
-  handleSpecialRoomChange = (event) => {
-    // setChecked(event.target.checked);
-  };
-
-
-
-
-  addItemHandler = () => {
-    console.log("GRAVANDO NOVO PROFISSIONAL....");
-    
-  };
 
   changeClickItemHandler = (index) => {
     console.log("CHANGE CLICK ITEM HANDLER = " + index);
@@ -68,9 +31,6 @@ export default class ManagementComponent extends Component {
         <br />
         
         <ProfessionalTable
-          professionals={this.state.professionals}
-          addItemHandler={this.addItemHandler}
-          delete={this.deleteItemHandler}
           change={this.changeClickItemHandler}
           changeEdit={this.changeEditInputHandler}
           save={this.saveItemHandler}

@@ -24,9 +24,21 @@ class ProfessionalTable extends Component {
         name: "",
         beginat: "",
         endat: "",
-        requiresSpecialtyRoom: false
+        requiresSpecialtyRoom: false,
       },
     };
+  }
+
+  componentDidMount() {
+    ProfessionalService.getAllProfessionals()
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            professionals: [...this.state.professionals, ...res.data],
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   handleRequireSpecialRoom = (e, requiresSpecialtyRoom) => {
@@ -46,10 +58,20 @@ class ProfessionalTable extends Component {
       name: this.state.model.name,
       beginat: this.state.model.beginat,
       endat: this.state.model.endat,
-      requiresSpecialtyRoom: this.state.model.requiresSpecialtyRoom
-    }
+      requiresSpecialtyRoom: this.state.model.requiresSpecialtyRoom,
+    };
     ProfessionalService.createProfessional(data);
-  }
+  };
+
+  delete = (id) => {
+    ProfessionalService.deleteProfessional(id).catch((err) => console.log(err));
+    var array = [...this.state.professionals];
+    var index = array.indexOf(array.find(p => p.id===id));
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ professionals: array });
+    }
+  };
 
   render() {
     return (
@@ -78,7 +100,9 @@ class ProfessionalTable extends Component {
           />
           <Switch
             checked={this.state.model.requiresSpecialtyRoom}
-            onChange={(e) => this.handleRequireSpecialRoom(e, 'requiresSpecialtyRoom')}
+            onChange={(e) =>
+              this.handleRequireSpecialRoom(e, "requiresSpecialtyRoom")
+            }
             color="primary"
             name="requiresSpecialtyRoom"
             inputProps={{ "aria-label": "primary checkbox" }}
@@ -104,7 +128,7 @@ class ProfessionalTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.props.professionals.map((item, index) => {
+              {this.state.professionals.map((item, index) => {
                 let itemBlock = null;
                 if (item.editMode) {
                   itemBlock = (
@@ -172,7 +196,9 @@ class ProfessionalTable extends Component {
                       <TableCell>
                         <Switch
                           checked={item.requireSpecialRoom}
-                          onChange={() => this.handleRequireSpecialRoom(item.id)}
+                          onChange={() =>
+                            this.handleRequireSpecialRoom(item.id)
+                          }
                           color="primary"
                           name="requiresSpecialtyRoom"
                           inputProps={{ "aria-label": "primary checkbox" }}
