@@ -14,6 +14,8 @@ import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import AddIcon from "@material-ui/icons/Add";
 import classes from "./ProfessionalTable.css";
+import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 class ProfessionalTable extends Component {
   constructor(props) {
@@ -22,8 +24,8 @@ class ProfessionalTable extends Component {
       professionals: [],
       model: {
         name: "",
-        beginat: "",
-        endat: "",
+        beginat: new Date(),
+        endat: new Date(),
         requiresSpecialtyRoom: false,
       },
     };
@@ -53,6 +55,12 @@ class ProfessionalTable extends Component {
     this.setState({ model });
   };
 
+  setTimeValues = (e, field) => {
+    const { model } = this.state;
+    model[field] = e;
+    this.setState({ model });
+  };
+
   save = () => {
     let data = {
       name: this.state.model.name,
@@ -66,7 +74,7 @@ class ProfessionalTable extends Component {
   delete = (id) => {
     ProfessionalService.deleteProfessional(id).catch((err) => console.log(err));
     var array = [...this.state.professionals];
-    var index = array.indexOf(array.find(p => p.id===id));
+    var index = array.indexOf(array.find((p) => p.id === id));
     if (index !== -1) {
       array.splice(index, 1);
       this.setState({ professionals: array });
@@ -77,44 +85,45 @@ class ProfessionalTable extends Component {
     return (
       <Paper>
         <div className="addInfo">
-          <TextField
-            variant="outlined"
-            className="TextField"
-            label="Nome"
-            value={this.state.model.name}
-            onChange={(e) => this.setValues(e, "name")}
-          />
-          <TextField
-            variant="outlined"
-            className="TextField"
-            label="Início"
-            value={this.state.model.beginat}
-            onChange={(e) => this.setValues(e, "beginat")}
-          />
-          <TextField
-            variant="outlined"
-            className="TextField"
-            label="Término"
-            value={this.state.model.endat}
-            onChange={(e) => this.setValues(e, "endat")}
-          />
-          <Switch
-            checked={this.state.model.requiresSpecialtyRoom}
-            onChange={(e) =>
-              this.handleRequireSpecialRoom(e, "requiresSpecialtyRoom")
-            }
-            color="primary"
-            name="requiresSpecialtyRoom"
-            inputProps={{ "aria-label": "primary checkbox" }}
-          />
-          <Button
-            variant="text"
-            color="primary"
-            className="Button"
-            onClick={this.save}
-          >
-            <AddIcon />
-          </Button>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <TextField
+              autoFocus={true}
+              variant="standard"
+              className="TextField"
+              label="Nome"
+              value={this.state.model.name}
+              onChange={(e) => this.setValues(e, "name")}
+            />
+            <TimePicker
+              label="Início"
+              value={this.state.model.beginat}
+              minutesStep={5}
+              onChange={(e) => this.setTimeValues(e, "beginat")}
+            />
+            <TimePicker
+              label="Término"
+              value={this.state.model.endat}
+              minutesStep={5}
+              onChange={(e) => this.setTimeValues(e, "endat")}
+            />
+            <Switch
+              checked={this.state.model.requiresSpecialtyRoom}
+              onChange={(e) =>
+                this.handleRequireSpecialRoom(e, "requiresSpecialtyRoom")
+              }
+              color="primary"
+              name="requiresSpecialtyRoom"
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+            <Button
+              variant="text"
+              color="primary"
+              className="Button"
+              onClick={this.save}
+            >
+              <AddIcon />
+            </Button>
+          </MuiPickersUtilsProvider>
         </div>
         <div className={classes.List}>
           <Table className={classes.Table}>

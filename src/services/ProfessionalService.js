@@ -1,6 +1,5 @@
 import axios from "axios";
 import authHeader from "./AuthHeader";
-import ProfessionalTable from "../components/DataTable/ProfessionalTable";
 
 const API_URL = "http://localhost:8080/api/professionals/";
 
