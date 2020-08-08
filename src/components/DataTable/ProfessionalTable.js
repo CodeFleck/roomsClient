@@ -72,8 +72,6 @@ class ProfessionalTable extends Component {
     ProfessionalService.createProfessional(data)
     .then((res) => {
       if (res.status === 200) {
-        // data.beginat = data.beginat.substring(16, 21)
-        // data.endat = data.endat.substring(16, 21)
         this.setState({
           professionals: [...this.state.professionals, res.data],
         });
@@ -184,7 +182,7 @@ class ProfessionalTable extends Component {
                       <TableCell>
                         <TextField
                           label="Sala Especial"
-                          value={item.editItem.price}
+                          value={item.editItem.requiresSpecialtyRoom}
                           onChange={(event) =>
                             this.changeEdit(
                               event,
@@ -215,7 +213,8 @@ class ProfessionalTable extends Component {
                       <TableCell>{item.endat}</TableCell>
                       <TableCell>
                         <Switch
-                          checked={item.requireSpecialRoom}
+                          disabled 
+                          checked={item.requiresSpecialtyRoom}
                           onChange={() =>
                             this.handleRequireSpecialRoom(item.id)
                           }
