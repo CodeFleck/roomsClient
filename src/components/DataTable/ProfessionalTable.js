@@ -24,8 +24,8 @@ class ProfessionalTable extends Component {
       professionals: [],
       model: {
         name: "",
-        beginat: new Date(),
-        endat: new Date(),
+        beginat: new Date().toString(),
+        endat: new Date().toString(),
         requiresSpecialtyRoom: false,
       },
     };
@@ -42,7 +42,7 @@ class ProfessionalTable extends Component {
       })
       .catch((err) => console.log(err));
   }
-
+  
   handleRequireSpecialRoom = (e, requiresSpecialtyRoom) => {
     const { model } = this.state;
     model.requiresSpecialtyRoom = Boolean(!model.requiresSpecialtyRoom);
@@ -57,7 +57,7 @@ class ProfessionalTable extends Component {
 
   setTimeValues = (e, field) => {
     const { model } = this.state;
-    model[field] = e;
+    model[field] = e.toString();
     this.setState({ model });
   };
 
@@ -68,7 +68,18 @@ class ProfessionalTable extends Component {
       endat: this.state.model.endat,
       requiresSpecialtyRoom: this.state.model.requiresSpecialtyRoom,
     };
-    ProfessionalService.createProfessional(data);
+    
+    ProfessionalService.createProfessional(data)
+    .then((res) => {
+      if (res.status === 200) {
+        // data.beginat = data.beginat.substring(16, 21)
+        // data.endat = data.endat.substring(16, 21)
+        this.setState({
+          professionals: [...this.state.professionals, res.data],
+        });
+      }
+    })
+    .catch((err) => console.log(err));
   };
 
   delete = (id) => {

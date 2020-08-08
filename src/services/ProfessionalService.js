@@ -10,7 +10,7 @@ const ProfessionalService = {
     });
   },
 
-  createProfessional: (professional) => {
+  createProfessional: professional => {
     return axios
       .post(API_URL, professional, { headers: authHeader() })
       .catch((error) => {
@@ -18,7 +18,7 @@ const ProfessionalService = {
       });
   },
 
-  deleteProfessional: (id) => {
+  deleteProfessional: id => {
     return axios
       .delete(API_URL + id, { headers: authHeader() })
       .catch((error) => {
