@@ -25,5 +25,20 @@ const ProfessionalService = {
         console.log(error);
       });
   },
+
+  getProfessionalById : id => {
+    return axios.get(API_URL + id, { headers: authHeader() })
+    .catch(error => {
+      console.log(error);
+    });
+  },
+
+  updateProfessional : professional => {
+    return axios
+    .put(API_URL + professional.id, professional, { headers: authHeader() })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
 };
 export default ProfessionalService;
