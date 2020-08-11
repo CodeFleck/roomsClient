@@ -10,6 +10,7 @@ import Register from "./components/RegisterComponent";
 import Home from "./components/HomeComponent";
 import Profile from "./components/ProfileComponent";
 import BoardUser from "./components/BoardUserComponent";
+import Management from "./components/ManagementComponent";
 import BoardModerator from "./components/BoardModeratorComponent";
 import BoardAdmin from "./components/BoardAdminComponent";
 
@@ -81,6 +82,14 @@ class App extends Component {
                   </Link>
                 </li>
               )}
+
+              {currentUser ? (
+                <li className="nav-item">
+                  <Link to={"/management"} className="nav-link">
+                    Cadastros
+                  </Link>
+                </li>
+              ) : (<div />)}
             </div>
 
             {currentUser ? (
@@ -120,6 +129,7 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
+              <Route path="/management" component={Management} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
             </Switch>
