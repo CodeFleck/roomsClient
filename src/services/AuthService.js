@@ -1,6 +1,7 @@
 import axios from "axios";
+import { properties } from '../properties';
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = `http://${properties.SERVER_IP}:${properties.PORT}/api/auth/`;
 
 class AuthService {
   login(username, password) {

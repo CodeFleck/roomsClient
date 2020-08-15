@@ -12,7 +12,7 @@ export default class ManagementComponent extends Component {
   render() {
     return (
       <div>
-        {/* <h3>Cadastro de Profissionais</h3> */}
+         <h3>Cadastro de Profissionais</h3> 
         <br />
         <br />
         <ProfessionalTable/>

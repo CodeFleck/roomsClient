@@ -93,7 +93,7 @@ class ProfessionalTable extends Component {
 
   save = () => {
     if (!this.state.editing) {
-      var data = {
+      let data = {
         name: this.state.model.name,
         beginat: this.state.model.beginat,
         endat: this.state.model.endat,
@@ -119,7 +119,7 @@ class ProfessionalTable extends Component {
       };
       this.setState({ model: empty });
     } else {
-      var data = {
+      let data = {
         id: this.state.editProfessional.id,
         name: this.state.editProfessional.name,
         beginat: this.state.editProfessional.beginat,
