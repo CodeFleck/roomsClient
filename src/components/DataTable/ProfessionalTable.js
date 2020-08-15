@@ -33,6 +33,7 @@ class ProfessionalTable extends Component {
       },
       editProfessional: {},
       editing: false,
+      editModeSwitch: false
     };
   }
 
@@ -65,12 +66,49 @@ class ProfessionalTable extends Component {
     this.setState({ model });
   };
 
-  handleRequireSpecialRoomEdit = () => {
+  handleRequireSpecialRoomForInsideEditMode = () => {
     const { editProfessional } = this.state;
     editProfessional.requiresSpecialtyRoom = Boolean(
-      !editProfessional.requiresSpecialtyRoom
+      !this.state.editModeSwitch
     );
+    console.log(editProfessional.requiresSpecialtyRoom);
     this.setState({ editProfessional });
+    this.setState({ editModeSwitch: Boolean(!this.state.editModeSwitch) });
+  };
+
+  handleRequireSpecialRoomEdit = (id, requiresSpecialtyRoom) => {
+    const { editProfessional } = this.state;
+    editProfessional.requiresSpecialtyRoom = Boolean(!requiresSpecialtyRoom);
+    editProfessional.id = id;
+    this.setState({ editProfessional });
+    ProfessionalService.updateAttribute(editProfessional)
+      .then((res) => {
+        if (res.status === 200) {
+          let copyOfProfessionals = [...this.state.professionals];
+          let index = copyOfProfessionals.findIndex(
+            (x) => x.id === editProfessional.id
+          );
+          let professional = copyOfProfessionals.find(
+            (x) => x.id === editProfessional.id
+          );
+          professional.requiresSpecialtyRoom =
+            editProfessional.requiresSpecialtyRoom;
+          copyOfProfessionals.splice(index, 1, professional);
+          this.setState({
+            professionals: [...copyOfProfessionals],
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+      const MOCK_DATE = "2015-03-25T03:00:00Z";
+      let empty = {
+        id: "",
+        name: "",
+        beginat: new Date(MOCK_DATE).toString(),
+        endat: new Date(MOCK_DATE).toString(),
+        requiresSpecialtyRoom: false,
+      };
+      this.setState({ editProfessional: empty });
   };
 
   setNewInputValues = (e, field) => {
@@ -119,39 +157,44 @@ class ProfessionalTable extends Component {
       };
       this.setState({ model: empty });
     } else {
-      let data = {
-        id: this.state.editProfessional.id,
-        name: this.state.editProfessional.name,
-        beginat: this.state.editProfessional.beginat,
-        endat: this.state.editProfessional.endat,
-        requiresSpecialtyRoom: this.state.editProfessional
-          .requiresSpecialtyRoom,
-      };
-
-      ProfessionalService.updateProfessional(data)
-        .then((res) => {
-          if (res.status === 200) {
-            let copyOfProfessionals = [...this.state.professionals];
-            let index = copyOfProfessionals.findIndex(x => x.id === res.data.id);
-            copyOfProfessionals.splice(index, 1, res.data);
-            this.setState({
-              professionals: [...copyOfProfessionals],
-            });
-          }
-        })
-        .catch((err) => console.log(err));
-      const MOCK_DATE = "2015-03-25T00:00:00Z";
-      let empty = {
-        id: "",
-        name: "",
-        beginat: new Date(MOCK_DATE).toString(),
-        endat: new Date(MOCK_DATE).toString(),
-        requiresSpecialtyRoom: false,
-      };
-      this.setState({ editProfessional: empty });
+      this.update();
     }
     this.setState({ editing: false });
   };
+
+  update() {
+    let data = {
+      id: this.state.editProfessional.id,
+      name: this.state.editProfessional.name,
+      beginat: this.state.editProfessional.beginat,
+      endat: this.state.editProfessional.endat,
+      requiresSpecialtyRoom: this.state.editProfessional.requiresSpecialtyRoom,
+    };
+
+    ProfessionalService.updateProfessional(data)
+      .then((res) => {
+        if (res.status === 200) {
+          let copyOfProfessionals = [...this.state.professionals];
+          let index = copyOfProfessionals.findIndex(
+            (x) => x.id === res.data.id
+          );
+          copyOfProfessionals.splice(index, 1, res.data);
+          this.setState({
+            professionals: [...copyOfProfessionals],
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+    const MOCK_DATE = "2015-03-25T00:00:00Z";
+    let empty = {
+      id: "",
+      name: "",
+      beginat: new Date(MOCK_DATE).toString(),
+      endat: new Date(MOCK_DATE).toString(),
+      requiresSpecialtyRoom: false,
+    };
+    this.setState({ editProfessional: empty });
+  }
 
   delete = (id) => {
     ProfessionalService.deleteProfessional(id).catch((err) => console.log(err));
@@ -171,7 +214,7 @@ class ProfessionalTable extends Component {
   };
 
   getTime(time) {
-    if(time.toString().length > 5) { 
+    if (time.toString().length > 5) {
       return time;
     } else {
       var d = new Date();
@@ -222,88 +265,65 @@ class ProfessionalTable extends Component {
             </Button>
           </MuiPickersUtilsProvider>
         </div>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Início</TableCell>
-                <TableCell>Término</TableCell>
-                <TableCell>Sala Especial</TableCell>
-                <TableCell>Editar | Excluir</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.professionals.map((item) => {
-                let itemBlock = null;
-                if (
-                  this.state.editing &&
-                  item.id === this.state.editProfessional.id
-                ) {
-                  itemBlock = (
-                    <TableRow key={this.state.editProfessional.id}>
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <TableCell>{item.id}</TableCell>
-                        <TableCell>
-                          <TextField
-                            label="Name"
-                            value={this.state.editProfessional.name}
-                            onChange={(e) => this.edit(e, item.id, "name")}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TimePicker
-                            label="Início"
-                            value={this.getTime(this.state.editProfessional.beginat)}
-                            minutesStep={5}
-                            onChange={(e) => this.editTimeValues(e, item.id, "beginat")}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TimePicker
-                            label="Término"
-                            value={this.getTime(this.state.editProfessional.endat)}
-                            minutesStep={5}
-                            onChange={(e) => this.editTimeValues(e, item.id, "endat")}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Switch
-                            checked={
-                              this.state.editProfessional.requiresSpecialtyRoom
-                            }
-                            onChange={(e) =>
-                              this.handleRequireSpecialRoomEdit()
-                            }
-                            color="primary"
-                            name="requiresSpecialtyRoom"
-                            inputProps={{ "aria-label": "primary checkbox" }}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="text"
-                            color="primary"
-                            onClick={this.save}
-                          >
-                            <SaveIcon />
-                          </Button>
-                        </TableCell>
-                      </MuiPickersUtilsProvider>
-                    </TableRow>
-                  );
-                } else {
-                  itemBlock = (
-                    <TableRow key={item.id}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Início</TableCell>
+              <TableCell>Término</TableCell>
+              <TableCell>Sala Especial</TableCell>
+              <TableCell>Editar | Excluir</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.state.professionals.map((item) => {
+              let itemBlock = null;
+              if (
+                this.state.editing &&
+                item.id === this.state.editProfessional.id
+              ) {
+                itemBlock = (
+                  <TableRow key={this.state.editProfessional.id}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <TableCell>{item.id}</TableCell>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.beginat}</TableCell>
-                      <TableCell>{item.endat}</TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Name"
+                          value={this.state.editProfessional.name}
+                          onChange={(e) => this.edit(e, item.id, "name")}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TimePicker
+                          label="Início"
+                          value={this.getTime(
+                            this.state.editProfessional.beginat
+                          )}
+                          minutesStep={5}
+                          onChange={(e) =>
+                            this.editTimeValues(e, item.id, "beginat")
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TimePicker
+                          label="Término"
+                          value={this.getTime(
+                            this.state.editProfessional.endat
+                          )}
+                          minutesStep={5}
+                          onChange={(e) =>
+                            this.editTimeValues(e, item.id, "endat")
+                          }
+                        />
+                      </TableCell>
                       <TableCell>
                         <Switch
-                          disabled
-                          checked={item.requiresSpecialtyRoom}
-                          onChange={() => this.handleRequireSpecialRoom()}
+                          checked={this.state.editModeSwitch}
+                          onChange={(e) =>
+                            this.handleRequireSpecialRoomForInsideEditMode()
+                          }
                           color="primary"
                           name="requiresSpecialtyRoom"
                           inputProps={{ "aria-label": "primary checkbox" }}
@@ -313,27 +333,60 @@ class ProfessionalTable extends Component {
                         <Button
                           variant="text"
                           color="primary"
-                          onClick={() => this.seEditModeOn(item.id)}
+                          onClick={this.save}
                         >
-                          <EditIcon />
-                        </Button>
-                        <Button
-                          variant="text"
-                          color="primary"
-                          onClick={() => {
-                            this.delete(item.id);
-                          }}
-                        >
-                          <DeleteIcon />
+                          <SaveIcon />
                         </Button>
                       </TableCell>
-                    </TableRow>
-                  );
-                }
-                return itemBlock;
-              })}
-            </TableBody>
-          </Table>
+                    </MuiPickersUtilsProvider>
+                  </TableRow>
+                );
+              } else {
+                itemBlock = (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.beginat}</TableCell>
+                    <TableCell>{item.endat}</TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={item.requiresSpecialtyRoom}
+                        onChange={() =>
+                          this.handleRequireSpecialRoomEdit(
+                            item.id,
+                            item.requiresSpecialtyRoom
+                          )
+                        }
+                        color="primary"
+                        name="requiresSpecialtyRoom"
+                        inputProps={{ "aria-label": "primary checkbox" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        onClick={() => this.seEditModeOn(item.id)}
+                      >
+                        <EditIcon />
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        onClick={() => {
+                          this.delete(item.id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              }
+              return itemBlock;
+            })}
+          </TableBody>
+        </Table>
       </Paper>
     );
   }

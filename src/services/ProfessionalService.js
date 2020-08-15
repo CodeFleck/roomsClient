@@ -40,6 +40,14 @@ const ProfessionalService = {
     .catch((error) => {
       console.log(error);
     })
+  },
+
+  updateAttribute : professional => {
+    return axios
+    .patch(API_URL + professional.id, professional, { headers: authHeader() })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 };
 export default ProfessionalService;
