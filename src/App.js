@@ -10,7 +10,8 @@ import Register from "./components/RegisterComponent";
 import Home from "./components/HomeComponent";
 import Profile from "./components/ProfileComponent";
 import BoardUser from "./components/BoardUserComponent";
-import Management from "./components/ManagementComponent";
+import ProfessionalManagement from "./components/ProfessionalManagementComponent";
+import RoomManagement from "./components/RoomManagementComponent";
 import BoardModerator from "./components/BoardModeratorComponent";
 import BoardAdmin from "./components/BoardAdminComponent";
 
@@ -22,7 +23,7 @@ class App extends Component {
     this.state = {
       showModeratorBoard: false,
       showAdminBoard: false,
-      currentUser: undefined
+      currentUser: undefined,
     };
   }
 
@@ -33,7 +34,7 @@ class App extends Component {
       this.setState({
         currentUser: user,
         showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN")
+        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
   }
@@ -85,11 +86,22 @@ class App extends Component {
 
               {currentUser ? (
                 <li className="nav-item">
-                  <Link to={"/management"} className="nav-link">
-                    Cadastros
+                  <Link to={"/professional-management"} className="nav-link">
+                    Cadastro Profissionais
                   </Link>
                 </li>
-              ) : (<div />)}
+              ) : (
+                <div />
+              )}
+              {currentUser ? (
+                <li className="nav-item">
+                  <Link to={"/room-management"} className="nav-link">
+                    Cadastro Salas
+                  </Link>
+                </li>
+              ) : (
+                <div />
+              )}
             </div>
 
             {currentUser ? (
@@ -129,7 +141,8 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
-              <Route path="/management" component={Management} />
+              <Route path="/professional-management" component={ProfessionalManagement} />
+              <Route path="/room-management" component={RoomManagement} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
             </Switch>
