@@ -170,7 +170,7 @@ class RoomTable extends Component {
   update() {
     let data = {
       id: this.state.editRoom.id,
-      roomName: this.state.editRoom.name, 
+      roomName: this.state.editRoom.roomName, 
       unit: this.state.editRoom.unit,
       openat: this.state.editRoom.openat,
       closeat: this.state.editRoom.closeat,
@@ -243,14 +243,21 @@ class RoomTable extends Component {
               value={this.state.model.roomName}
               onChange={(e) => this.setNewInputValues(e, "roomName")}
             />
+            <TextField
+              variant="standard"
+              className="TextField"
+              label="Unidade"
+              value={this.state.model.unit}
+              onChange={(e) => this.setNewInputValues(e, "unit")}
+            />
             <TimePicker
-              label="Início"
+              label="Abre"
               value={this.state.model.openat}
               minutesStep={5}
               onChange={(e) => this.setTimeValues(e, "openat")}
             />
             <TimePicker
-              label="Término"
+              label="Fecha"
               value={this.state.model.closeat}
               minutesStep={5}
               onChange={(e) => this.setTimeValues(e, "closeat")}
@@ -277,8 +284,9 @@ class RoomTable extends Component {
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Sala</TableCell>
-              <TableCell>Início</TableCell>
-              <TableCell>Término</TableCell>
+              <TableCell>Unidade</TableCell>
+              <TableCell>Abre</TableCell>
+              <TableCell>Fecha</TableCell>
               <TableCell>Sala Especialidade</TableCell>
               <TableCell>Editar | Excluir</TableCell>
             </TableRow>
@@ -299,6 +307,13 @@ class RoomTable extends Component {
                           label="Name"
                           value={this.state.editRoom.roomName}
                           onChange={(e) => this.edit(e, item.id, "roomName")}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Unit"
+                          value={this.state.editRoom.unit}
+                          onChange={(e) => this.edit(e, item.id, "unit")}
                         />
                       </TableCell>
                       <TableCell>
