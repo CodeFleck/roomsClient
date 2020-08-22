@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
 import AuthService from "./services/AuthService";
-
-import Login from "./components/LoginComponent";
-import Register from "./components/RegisterComponent";
+import Login from "./components/Login/LoginComponent";
+import Register from "./components/Login/RegisterComponent";
 import Home from "./components/HomeComponent";
-import Profile from "./components/ProfileComponent";
-import BoardUser from "./components/BoardUserComponent";
-import ProfessionalManagement from "./components/ProfessionalManagementComponent";
-import RoomManagement from "./components/RoomManagementComponent";
-import BoardModerator from "./components/BoardModeratorComponent";
-import BoardAdmin from "./components/BoardAdminComponent";
+import Profile from "./components/Login/ProfileComponent";
+import BoardUser from "./components/Boards/BoardUserComponent";
+import ProfessionalManagement from "./components/Professional/ProfessionalManagementComponent";
+import RoomManagement from "./components/Room/RoomManagementComponent";
+import BoardModerator from "./components/Boards/BoardModeratorComponent";
+import BoardAdmin from "./components/Boards/BoardAdminComponent";
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class App extends Component {
   constructor(props) {
@@ -85,9 +86,9 @@ class App extends Component {
               )}
 
               {currentUser ? (
-                <li className="nav-item">
+                <li className="nav-item ">
                   <Link to={"/professional-management"} className="nav-link">
-                    Cadastro Profissionais
+                    Profissionais
                   </Link>
                 </li>
               ) : (
@@ -96,7 +97,7 @@ class App extends Component {
               {currentUser ? (
                 <li className="nav-item">
                   <Link to={"/room-management"} className="nav-link">
-                    Cadastro Salas
+                    Salas
                   </Link>
                 </li>
               ) : (
@@ -141,7 +142,10 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
-              <Route path="/professional-management" component={ProfessionalManagement} />
+              <Route
+                path="/professional-management"
+                component={ProfessionalManagement}
+              />
               <Route path="/room-management" component={RoomManagement} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />

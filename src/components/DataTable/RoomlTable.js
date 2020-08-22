@@ -56,7 +56,6 @@ class RoomTable extends Component {
           this.setState({
             rooms: [...this.state.rooms, ...res.data],
           });
-          console.log(JSON.stringify(this.state.rooms));
         }
       })
       .catch((err) => console.log(err));
