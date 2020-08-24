@@ -12,9 +12,6 @@ import ProfessionalManagement from "./components/Professional/ProfessionalManage
 import RoomManagement from "./components/Room/RoomManagementComponent";
 import BoardModerator from "./components/Boards/BoardModeratorComponent";
 import BoardAdmin from "./components/Boards/BoardAdminComponent";
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 
 class App extends Component {
   constructor(props) {

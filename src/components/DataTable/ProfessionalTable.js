@@ -15,6 +15,13 @@ import Switch from "@material-ui/core/Switch";
 import AddIcon from "@material-ui/icons/Add";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import ListItemText from "@material-ui/core/ListItemText";
+import Select from "@material-ui/core/Select";
+import Checkbox from "@material-ui/core/Checkbox";
 
 class ProfessionalTable extends Component {
   constructor(props) {
@@ -29,11 +36,13 @@ class ProfessionalTable extends Component {
         name: "",
         beginat: new Date(MOCK_DATE).toString(),
         endat: new Date(MOCK_DATE).toString(),
+        dayofweekList: [],
         requiresSpecialtyRoom: false,
       },
       editProfessional: {},
       editing: false,
-      editModeSwitch: false
+      editModeSwitch: false,
+      workDays: [],
     };
   }
 
@@ -42,6 +51,9 @@ class ProfessionalTable extends Component {
     ProfessionalService.getProfessionalById(id)
       .then((res) => {
         if (res.status === 200) {
+          console.log(
+            "populating edit professional... " + JSON.stringify(res.data)
+          );
           this.setState({ editProfessional: res.data });
         }
       })
@@ -71,7 +83,6 @@ class ProfessionalTable extends Component {
     editProfessional.requiresSpecialtyRoom = Boolean(
       !this.state.editModeSwitch
     );
-    console.log(editProfessional.requiresSpecialtyRoom);
     this.setState({ editProfessional });
     this.setState({ editModeSwitch: Boolean(!this.state.editModeSwitch) });
   };
@@ -100,15 +111,11 @@ class ProfessionalTable extends Component {
         }
       })
       .catch((err) => console.log(err));
-      const MOCK_DATE = "2015-03-25T03:00:00Z";
-      let empty = {
-        id: "",
-        name: "",
-        beginat: new Date(MOCK_DATE).toString(),
-        endat: new Date(MOCK_DATE).toString(),
-        requiresSpecialtyRoom: false,
-      };
-      this.setState({ editProfessional: empty });
+    let empty = {
+      id: "",
+      requiresSpecialtyRoom: false,
+    };
+    this.setState({ editProfessional: empty });
   };
 
   setNewInputValues = (e, field) => {
@@ -135,6 +142,7 @@ class ProfessionalTable extends Component {
         name: this.state.model.name,
         beginat: this.state.model.beginat,
         endat: this.state.model.endat,
+        dayofweekList: this.state.workDays,
         requiresSpecialtyRoom: this.state.model.requiresSpecialtyRoom,
       };
 
@@ -153,9 +161,11 @@ class ProfessionalTable extends Component {
         name: "",
         beginat: new Date(MOCK_DATE).toString(),
         endat: new Date(MOCK_DATE).toString(),
+        dayofweekList: [],
         requiresSpecialtyRoom: false,
       };
       this.setState({ model: empty });
+      this.setState({ workDays: [] });
     } else {
       this.update();
     }
@@ -168,6 +178,7 @@ class ProfessionalTable extends Component {
       name: this.state.editProfessional.name,
       beginat: this.state.editProfessional.beginat,
       endat: this.state.editProfessional.endat,
+      dayofweekList: this.state.workDays,
       requiresSpecialtyRoom: this.state.editProfessional.requiresSpecialtyRoom,
     };
 
@@ -191,15 +202,17 @@ class ProfessionalTable extends Component {
       name: "",
       beginat: new Date(MOCK_DATE).toString(),
       endat: new Date(MOCK_DATE).toString(),
+      dayofweekList: [],
       requiresSpecialtyRoom: false,
     };
+    this.setState({ workDays: [] });
     this.setState({ editProfessional: empty });
   }
 
   delete = (id) => {
     ProfessionalService.deleteProfessional(id).catch((err) => console.log(err));
-    var array = [...this.state.professionals];
-    var index = array.indexOf(array.find((p) => p.id === id));
+    let array = [...this.state.professionals];
+    let index = array.indexOf(array.find((p) => p.id === id));
     if (index !== -1) {
       array.splice(index, 1);
       this.setState({ professionals: array });
@@ -223,7 +236,59 @@ class ProfessionalTable extends Component {
     }
   }
 
+  handleDayChange(e) {
+    let { workDays } = this.state;
+    workDays = e.target.value;
+    this.setState({ workDays });
+  }
+
+  editDayChange(e, id) {
+    const { editProfessional } = this.state;
+    editProfessional.dayofweekList = e.target.value;
+    editProfessional.id = id;
+    this.setState({ editProfessional });
+    ProfessionalService.updateAttribute(editProfessional)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("editDayChange res..." + JSON.stringify(res.data));
+          let copyOfProfessionals = [...this.state.professionals];
+          let index = copyOfProfessionals.findIndex(
+            (x) => x.id === editProfessional.id
+          );
+          let professional = copyOfProfessionals.find(
+            (x) => x.id === editProfessional.id
+          );
+          professional.dayofweekList = editProfessional.dayofweekList;
+          copyOfProfessionals.splice(index, 1, professional);
+          this.setState({
+            professionals: [...copyOfProfessionals],
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
+    const dayNames = [
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado",
+      "Domingo",
+    ];
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+      PaperProps: {
+        style: {
+          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+          width: 250,
+        },
+      },
+    };
+
     return (
       <Paper>
         <div className="addInfo">
@@ -248,6 +313,27 @@ class ProfessionalTable extends Component {
               minutesStep={5}
               onChange={(e) => this.setTimeValues(e, "endat")}
             />
+            <FormControl>
+              <InputLabel>Dias</InputLabel>
+              <Select
+                id="mutiple-checkbox"
+                multiple
+                value={this.state.workDays}
+                onChange={(e) => this.handleDayChange(e)}
+                input={<Input />}
+                renderValue={(selected) => selected.join(", ")}
+                MenuProps={MenuProps}
+              >
+                {dayNames.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    <Checkbox
+                      checked={this.state.workDays.indexOf(name) > -1}
+                    />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Switch
               checked={this.state.model.requiresSpecialtyRoom}
               onChange={(e) => this.handleRequireSpecialRoom()}
@@ -272,7 +358,8 @@ class ProfessionalTable extends Component {
               <TableCell>Name</TableCell>
               <TableCell>Início</TableCell>
               <TableCell>Término</TableCell>
-              <TableCell>Sala Especialidade</TableCell>
+              <TableCell>Dias da Semana</TableCell>
+              <TableCell>Sala Especial</TableCell>
               <TableCell>Editar | Excluir</TableCell>
             </TableRow>
           </TableHead>
@@ -284,7 +371,7 @@ class ProfessionalTable extends Component {
                 item.id === this.state.editProfessional.id
               ) {
                 itemBlock = (
-                  <TableRow key={this.state.editProfessional.id}>
+                  <TableRow key={item.id}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <TableCell>{item.id}</TableCell>
                       <TableCell>
@@ -319,8 +406,39 @@ class ProfessionalTable extends Component {
                         />
                       </TableCell>
                       <TableCell>
+                        <FormControl>
+                          <InputLabel>Dias</InputLabel>
+                          <Select
+                            id="mutiple-checkbox"
+                            multiple
+                            value={this.state.editProfessional.dayofweekList}
+                            onChange={(e) =>
+                              this.editDayChange(e, item.id, item.dayofweekList)
+                            }
+                            input={<Input />}
+                            renderValue={(selected) => selected.join(", ")}
+                            MenuProps={MenuProps}
+                          >
+                            {dayNames.map((name) => (
+                              <MenuItem key={name} value={name}>
+                                <Checkbox
+                                  checked={
+                                    this.state.editProfessional.dayofweekList.indexOf(
+                                      name
+                                    ) > -1
+                                  }
+                                />
+                                <ListItemText primary={name} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
                         <Switch
-                          checked={this.state.editModeSwitch}
+                          checked={
+                            this.state.editProfessional.requiresSpecialtyRoom
+                          }
                           onChange={(e) =>
                             this.handleRequireSpecialRoomForInsideEditMode()
                           }
@@ -348,6 +466,31 @@ class ProfessionalTable extends Component {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.beginat}</TableCell>
                     <TableCell>{item.endat}</TableCell>
+                    <TableCell>
+                      <FormControl>
+                        <InputLabel>Dias</InputLabel>
+                        <Select
+                          id="mutiple-checkbox"
+                          multiple
+                          value={item.dayofweekList}
+                          onChange={(e) =>
+                            this.editDayChange(e, item.id, item.dayofweekList)
+                          }
+                          input={<Input />}
+                          renderValue={(selected) => selected.join(", ")}
+                          MenuProps={MenuProps}
+                        >
+                          {dayNames.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox
+                                checked={item.dayofweekList.indexOf(name) > -1}
+                              />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </TableCell>
                     <TableCell>
                       <Switch
                         checked={item.requiresSpecialtyRoom}
