@@ -52,9 +52,12 @@ class ProfessionalTable extends Component {
       .then((res) => {
         if (res.status === 200) {
           console.log(
-            "populating edit professional... " + JSON.stringify(res.data)
+            "Res data ->>> " + JSON.stringify(res.data)
           );
           this.setState({ editProfessional: res.data });
+          console.log(
+            "EDIT PROFESSIONAL ->>> " + JSON.stringify(this.state.editProfessional)
+          );
         }
       })
       .catch((err) => console.log(err));
@@ -81,10 +84,9 @@ class ProfessionalTable extends Component {
   handleRequireSpecialRoomForInsideEditMode = () => {
     const { editProfessional } = this.state;
     editProfessional.requiresSpecialtyRoom = Boolean(
-      !this.state.editModeSwitch
+      !this.state.editProfessional.requiresSpecialtyRoom
     );
     this.setState({ editProfessional });
-    this.setState({ editModeSwitch: Boolean(!this.state.editModeSwitch) });
   };
 
   handleRequireSpecialRoomEdit = (id, requiresSpecialtyRoom) => {
@@ -173,14 +175,7 @@ class ProfessionalTable extends Component {
   };
 
   update() {
-    let data = {
-      id: this.state.editProfessional.id,
-      name: this.state.editProfessional.name,
-      beginat: this.state.editProfessional.beginat,
-      endat: this.state.editProfessional.endat,
-      dayofweekList: this.state.workDays,
-      requiresSpecialtyRoom: this.state.editProfessional.requiresSpecialtyRoom,
-    };
+    let data = this.state.editProfessional;
 
     ProfessionalService.updateProfessional(data)
       .then((res) => {
@@ -196,17 +191,6 @@ class ProfessionalTable extends Component {
         }
       })
       .catch((err) => console.log(err));
-    const MOCK_DATE = "2015-03-25T00:00:00Z";
-    let empty = {
-      id: "",
-      name: "",
-      beginat: new Date(MOCK_DATE).toString(),
-      endat: new Date(MOCK_DATE).toString(),
-      dayofweekList: [],
-      requiresSpecialtyRoom: false,
-    };
-    this.setState({ workDays: [] });
-    this.setState({ editProfessional: empty });
   }
 
   delete = (id) => {
@@ -231,7 +215,7 @@ class ProfessionalTable extends Component {
       return time;
     } else {
       var d = new Date();
-      d.setHours(time.substring(0, 2), time.substring(4, 5), 0);
+      d.setHours(time.substring(0, 2), time.substring(3, 5), 0);
       return d;
     }
   }
@@ -240,6 +224,12 @@ class ProfessionalTable extends Component {
     let { workDays } = this.state;
     workDays = e.target.value;
     this.setState({ workDays });
+  }
+
+  handleDayChangeInsideEdit(e) {
+    let { editProfessional } = this.state;
+    editProfessional.dayofweekList = e.target.value;
+    this.setState({ editProfessional });
   }
 
   editDayChange(e, id) {
@@ -412,8 +402,8 @@ class ProfessionalTable extends Component {
                             id="mutiple-checkbox"
                             multiple
                             value={this.state.editProfessional.dayofweekList}
-                            onChange={(e) =>
-                              this.editDayChange(e, item.id, item.dayofweekList)
+                            onChange={e =>
+                              this.handleDayChangeInsideEdit(e)
                             }
                             input={<Input />}
                             renderValue={(selected) => selected.join(", ")}
@@ -474,7 +464,7 @@ class ProfessionalTable extends Component {
                           multiple
                           value={item.dayofweekList}
                           onChange={(e) =>
-                            this.editDayChange(e, item.id, item.dayofweekList)
+                            this.editDayChange(e, item.id)
                           }
                           input={<Input />}
                           renderValue={(selected) => selected.join(", ")}

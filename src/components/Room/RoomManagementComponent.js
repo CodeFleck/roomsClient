@@ -12,7 +12,7 @@ export default class RoomManagementComponent extends Component {
   render() {
     return (
       <div>
-         <h3>Cadastro de Salas</h3> 
+         {/* <h3>Cadastro de Salas</h3>  */}
         <br />
         <br />
           <RoomTable />
