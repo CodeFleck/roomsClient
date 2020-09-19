@@ -1,152 +1,65 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
+import React, { Component } from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
-const salas = [
-  { id: uuid(), content: "Daniel Fleck" },
-  { id: uuid(), content: "Annemarie Fleck" },
-];
+class ScheduleTable extends Component {
+  constructor(props) {
+    super(props);
 
-const columnsFromBackend = {
-  [uuid()]: {
-    name: "Segunda",
-    items: salas,
-  },
-  [uuid()]: {
-    name: "Terça",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Quarta",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Quinta",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Sexta",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Sábado",
-    items: [],
+    this.state = {
+      columnList: [],
+      rooms: [],
+    };
   }
-};
 
-const onDragEnd = (result, columns, setColumns) => {
-  if (!result.destination) return;
-  const { source, destination } = result;
-  if (source.droppableId !== destination.droppableId) {
-    const sourceColumn = columns[source.droppableId];
-    const destColumn = columns[destination.droppableId];
-    const sourceItems = [...sourceColumn.items];
-    const destItems = [...destColumn.items];
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...sourceColumn,
-        items: sourceItems
-      },
-      [destination.droppableId]: {
-        ...destColumn,
-        items: destItems
-      }
-    })
-  } else {
-    const column = columns[source.droppableId];
-    const copiedItems = [...column.items];
-    const [removed] = copiedItems.splice(source.index, 1);
-    copiedItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...column,
-        items: copiedItems,
-      },
-    });
+  useStyles = () => makeStyles({
+    table: {
+      minWidth: 650,
+    },
+  });
+
+  render() {
+    const classes = this.useStyles();
+    const schedule = [...this.props.rooms];
+
+    return (
+      <div className="container-fluid">
+        <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">Segunda</TableCell>
+            <TableCell align="center">Terça</TableCell>
+            <TableCell align="center">Quarta</TableCell>
+            <TableCell align="center">Quinta</TableCell>
+            <TableCell align="center">Sexta</TableCell>
+            <TableCell align="center">Sábado</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {schedule.map((room) => (
+            <TableRow key={room.id}>
+              <TableCell align="center" component="th" scope="row">
+                {room.roomName} - {room.professional.name.toString()}
+              </TableCell>
+              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
+              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
+              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
+              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
+              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+      </div>
+    );
   }
-};
-
-function App() {
-  const [columns, setColumns] = useState(columnsFromBackend);
-  return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%", width: "100vw" }}>
-      <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
-      >
-        {Object.entries(columns).map(([id, column]) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
-                <Droppable droppableId={id} key={id}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          background: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 200,
-                          minHeight: 500,
-                        }}
-                      >
-                        {column.items.map((item, index) => {
-                          return (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      padding: 16,
-                                      margin: "0 0 8px 0",
-                                      minHeight: "50px",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
-                                      color: "white",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {item.content}
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
-              </div>
-            </div>
-          );
-        })}
-      </DragDropContext>
-    </div>
-  );
 }
-
-export default App;
+export default ScheduleTable;

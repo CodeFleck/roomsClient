@@ -11,6 +11,7 @@ export default class BoardUser extends Component {
 
     this.state = {
       content: "",
+      salas: []
     };
   }
 
@@ -34,11 +35,11 @@ export default class BoardUser extends Component {
     );
   }
 
-  generateSchedule() {
+  generateSchedule = () => {
     ScheduleService.generateSchedule()
       .then((res) => {
         if (res.status === 200) {
-          console.log(JSON.stringify(res.data));
+          this.setState({ salas : [...res.data]});
         }
       })
       .catch((err) => console.log(err));
@@ -62,7 +63,7 @@ export default class BoardUser extends Component {
           </Button>
         </div>
       </div>
-      <ScheduleTable />
+      <ScheduleTable rooms={this.state.salas}/>
       </div>
     );
   }
