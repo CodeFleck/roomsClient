@@ -1,0 +1,4 @@
+.scheduleRow {
+  display: flex;
+  flex-direction: column;
+}

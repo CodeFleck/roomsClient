@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import "./ScheduleTable.css";
 
 class ScheduleTable extends Component {
   constructor(props) {
@@ -18,46 +19,114 @@ class ScheduleTable extends Component {
     };
   }
 
-  useStyles = () => makeStyles({
-    table: {
-      minWidth: 650,
-    },
-  });
+  useStyles = () =>
+    makeStyles({
+      table: {
+        minWidth: 650,
+      },
+    });
 
   render() {
     const classes = this.useStyles();
-    const schedule = [...this.props.rooms];
+    const monday = [...this.props.mondayRooms];
+    const tuesday = [...this.props.tuesdayRooms];
+    const wednesday = [...this.props.wednesdayRooms];
+    const thursday = [...this.props.thursdayRooms];
+    const friday = [...this.props.fridayRooms];
+    const saturday = [...this.props.saturdayRooms];
 
     return (
       <div className="container-fluid">
         <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Segunda</TableCell>
-            <TableCell align="center">Terça</TableCell>
-            <TableCell align="center">Quarta</TableCell>
-            <TableCell align="center">Quinta</TableCell>
-            <TableCell align="center">Sexta</TableCell>
-            <TableCell align="center">Sábado</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {schedule.map((room) => (
-            <TableRow key={room.id}>
-              <TableCell align="center" component="th" scope="row">
-                {room.roomName} - {room.professional.name.toString()}
-              </TableCell>
-              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
-              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
-              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
-              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
-              <TableCell align="center">{room.roomName} - {room.professional.name.toString()}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Segunda</TableCell>
+                <TableCell align="center">Terça</TableCell>
+                <TableCell align="center">Quarta</TableCell>
+                <TableCell align="center">Quinta</TableCell>
+                <TableCell align="center">Sexta</TableCell>
+                <TableCell align="center">Sábado</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow className="scheduleRow">
+                <TableCell>
+                  {monday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {tuesday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      daniel {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {wednesday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {thursday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {friday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  {saturday.map((room) => (
+                    <div
+                      key={room.id}
+                      align="center"
+                      component="th"
+                      scope="row"
+                    >
+                      {room.roomName} - {room.professional.name.toString()}
+                    </div>
+                  ))}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     );
   }
