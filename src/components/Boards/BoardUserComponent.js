@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
 import UserService from "../../services/UserService";
 import ScheduleService from "../../services/ScheduleService";
 import "./BoardUserCss.css";
@@ -93,14 +92,13 @@ export default class BoardUser extends Component {
             <h3>Agenda</h3>
           </div>
           <div className="float-right">
-            <Button
+            <button
+              type="button"
               onClick={this.generateSchedule}
-              variant="contained"
-              color="primary"
-              disableElevation
+              class="btn btn-primary"
             >
               Gerar escala
-            </Button>
+            </button>
           </div>
         </div>
         <ScheduleTable

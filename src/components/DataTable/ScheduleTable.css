@@ -4,7 +4,7 @@
 }
 
 .labelSpecialRoom{
-  margin: 0 0 15px 30px;
+  margin: 0 0 15px 30px; 
 }
 
 .labelBox {
@@ -12,4 +12,9 @@
   min-width: 10px;
   max-height: 10px;
   margin: 9px 10px 0 0;
+  background-color: lightgreen;
+}
+
+.isSpecialRoom {
+  background-color: lightgreen;
 }

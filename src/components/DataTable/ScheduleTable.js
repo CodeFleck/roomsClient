@@ -34,11 +34,10 @@ class ScheduleTable extends Component {
     const thursday = [...this.props.thursdayRooms];
     const friday = [...this.props.fridayRooms];
     const saturday = [...this.props.saturdayRooms];
-    console.log(JSON.stringify(monday));
     return (
       <div className="container-fluid">
         <div className="row labelSpecialRoom">
-          <div className="bg-info labelBox"></div>
+          <div className="labelBox"></div>
           <p>Sala especial</p>
         </div>
         <TableContainer component={Paper}>
@@ -59,7 +58,7 @@ class ScheduleTable extends Component {
                   {monday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
@@ -77,7 +76,7 @@ class ScheduleTable extends Component {
                   {tuesday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
@@ -95,7 +94,7 @@ class ScheduleTable extends Component {
                   {wednesday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
@@ -113,7 +112,7 @@ class ScheduleTable extends Component {
                   {thursday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
@@ -131,7 +130,7 @@ class ScheduleTable extends Component {
                   {friday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
@@ -149,7 +148,7 @@ class ScheduleTable extends Component {
                   {saturday.map((room) =>
                     room.specialtyRoom ? (
                       <div
-                        className="bg-info"
+                        className="isSpecialRoom"
                         key={room.id}
                         align="center"
                         component="th"
