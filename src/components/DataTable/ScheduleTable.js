@@ -34,9 +34,13 @@ class ScheduleTable extends Component {
     const thursday = [...this.props.thursdayRooms];
     const friday = [...this.props.fridayRooms];
     const saturday = [...this.props.saturdayRooms];
-
+    console.log(JSON.stringify(monday));
     return (
       <div className="container-fluid">
+        <div className="row labelSpecialRoom">
+          <div className="bg-info labelBox"></div>
+          <p>Sala especial</p>
+        </div>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
@@ -52,76 +56,112 @@ class ScheduleTable extends Component {
             <TableBody>
               <TableRow className="scheduleRow">
                 <TableCell>
-                  {monday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {monday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
                 <TableCell>
-                  {tuesday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      daniel {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {tuesday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
                 <TableCell>
-                  {wednesday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {wednesday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
                 <TableCell>
-                  {thursday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {thursday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
                 <TableCell>
-                  {friday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {friday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
                 <TableCell>
-                  {saturday.map((room) => (
-                    <div
-                      key={room.id}
-                      align="center"
-                      component="th"
-                      scope="row"
-                    >
-                      {room.roomName} - {room.professional.name.toString()}
-                    </div>
-                  ))}
+                  {saturday.map((room) =>
+                    room.specialtyRoom ? (
+                      <div
+                        className="bg-info"
+                        key={room.id}
+                        align="center"
+                        component="th"
+                      >
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    ) : (
+                      <div key={room.id} align="center" component="th">
+                        {room.roomName} - {room.professional.name.toString()}
+                      </div>
+                    )
+                  )}
                 </TableCell>
               </TableRow>
             </TableBody>
