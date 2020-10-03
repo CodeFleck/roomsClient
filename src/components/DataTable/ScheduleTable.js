@@ -63,11 +63,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
@@ -81,11 +81,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
@@ -99,11 +99,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
@@ -117,11 +117,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
@@ -135,11 +135,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
@@ -153,11 +153,11 @@ class ScheduleTable extends Component {
                         align="center"
                         component="th"
                       >
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     ) : (
                       <div key={room.id} align="center" component="th">
-                        {room.roomName} - {room.professional.name.toString()}
+                        {room.roomName} - {room.professional?.name.toString()}
                       </div>
                     )
                   )}
