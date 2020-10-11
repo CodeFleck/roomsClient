@@ -47,7 +47,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <nav className="navbar navbar-expand navbar-dark bg-primary">
             <Link to={"/"} className="navbar-brand">
               Rooms
             </Link>
@@ -132,7 +132,7 @@ class App extends Component {
             )}
           </nav>
 
-          <div className="container mt-3">
+          <div className="container-fluid">
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
               <Route exact path="/login" component={Login} />

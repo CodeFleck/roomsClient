@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
 import UserService from "../../services/UserService";
 import ScheduleService from "../../services/ScheduleService";
+import "./BoardUserCss.css";
+import ScheduleTable from "../DataTable/ScheduleTable";
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -9,6 +10,12 @@ export default class BoardUser extends Component {
 
     this.state = {
       content: "",
+      mondayRooms: [],
+      tuesdayRooms: [],
+      wednesdayRooms: [],
+      thursdayRooms: [],
+      fridayRooms: [],
+      saturdayRooms: [],
     };
   }
 
@@ -16,7 +23,7 @@ export default class BoardUser extends Component {
     UserService.getUserBoard().then(
       (response) => {
         this.setState({
-          content: response.data,
+          content: Array.of(response.data),
         });
       },
       (error) => {
@@ -32,30 +39,46 @@ export default class BoardUser extends Component {
     );
   }
 
-  generateSchedule() {
+  generateSchedule = () => {
     ScheduleService.generateSchedule()
-    .then((res) => {
-      if (res.status === 200) {
-        console.log(JSON.stringify(res.data));
-      }
-    })
-    .catch((err) => console.log(err));
-  }
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({ mondayRooms: [...res.data] });
+          this.setState({ tuesdayRooms: [...res.data] });
+          this.setState({ wednesdayRooms: [...res.data] });
+          this.setState({ thursdayRooms: [...res.data] });
+          this.setState({ fridayRooms: [...res.data] });
+          this.setState({ saturdayRooms: [...res.data] });
+        }
+      })
+      .catch((err) => console.log(err));      
+  };
 
   render() {
     return (
       <div>
-        <h3>Agenda</h3>
-        <br />
-        <Button
-          onClick={this.generateSchedule}
-          variant="contained"
-          color="primary"
-          disableElevation
-        >
-          Gerar escala
-        </Button>
-        <br />
+        <div className="clearfix scheduleTop">
+          <div className="float-left">
+            <h3>Agenda</h3>
+          </div>
+          <div className="float-right">
+            <button
+              type="button"
+              onClick={this.generateSchedule}
+              className="btn btn-primary"
+            >
+              Gerar escala
+            </button>
+          </div>
+        </div>
+        <ScheduleTable
+          mondayRooms={this.state.mondayRooms}
+          tuesdayRooms={this.state.tuesdayRooms}
+          wednesdayRooms={this.state.wednesdayRooms}
+          thursdayRooms={this.state.thursdayRooms}
+          fridayRooms={this.state.fridayRooms}
+          saturdayRooms={this.state.saturdayRooms}
+        />
       </div>
     );
   }

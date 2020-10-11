@@ -1,6 +1,6 @@
 export const properties = {
     SERVER_IP: "localhost",
-    PORT:"8080"
+    PORT:"8090"
 };
 // export const properties = {
 //     SERVER_IP: "172.20.3.56",
