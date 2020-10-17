@@ -7,6 +7,7 @@ import "./BoardUserCss.css";
 import ScheduleTable from "../DataTable/ScheduleTable";
 import SnackBar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton'
+import { SnackbarContent } from '@material-ui/core';
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -112,13 +113,15 @@ export default class BoardUser extends Component {
               open={this.state.snackBarOpen}
               autoHideDuration= {3000}
               onClose={this.snackBarClose}
-              message={<span id="message-id">{this.state.snackBarMessage}</span>}
+              //message={<span id="message-id">{this.state.snackBarMessage}</span>}
               action={[<IconButton 
                 key="close"
                 arial-label="Close"
                 color="inherit"
                 onClick={this.snackBarClose}>x</IconButton>]}
-                />
+                >
+                <SnackbarContent style={{backgroundColor:'#f44336'}} message={<span id="client-snackbar">{this.state.snackBarMessage}</span>} />
+                </SnackBar>
           </div>
         </div>
         <ScheduleTable
