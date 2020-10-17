@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import UserService from "../../services/UserService";
 import ScheduleService from "../../services/ScheduleService";
+import ProfessionalService from "../../services/ProfessionalService";
+import RoomService from "../../services/RoomService";
 import "./BoardUserCss.css";
 import ScheduleTable from "../DataTable/ScheduleTable";
 
@@ -16,10 +18,13 @@ export default class BoardUser extends Component {
       thursdayRooms: [],
       fridayRooms: [],
       saturdayRooms: [],
+      totalNumberOfProfessionals: "",
+      totalNumberOfRooms: ""
     };
   }
 
   componentDidMount() {
+    this.fetchNumberOfRoomsAndProfessionals();
     UserService.getUserBoard().then(
       (response) => {
         this.setState({
@@ -40,19 +45,45 @@ export default class BoardUser extends Component {
   }
 
   generateSchedule = () => {
-    ScheduleService.generateSchedule()
+    this.fetchNumberOfRoomsAndProfessionals();
+    let totalProfessionals = this.state.totalNumberOfProfessionals;
+    let totalRooms = this.state.totalNumberOfRooms;
+
+    if (totalRooms >= totalProfessionals) {
+      ScheduleService.generateSchedule()
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ mondayRooms: [...res.data] });
+            this.setState({ tuesdayRooms: [...res.data] });
+            this.setState({ wednesdayRooms: [...res.data] });
+            this.setState({ thursdayRooms: [...res.data] });
+            this.setState({ fridayRooms: [...res.data] });
+            this.setState({ saturdayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log("there are more professionals than rooms!");
+
+    }
+  };
+
+  fetchNumberOfRoomsAndProfessionals = () => {
+    ProfessionalService.getAllProfessionals()
       .then((res) => {
         if (res.status === 200) {
-          this.setState({ mondayRooms: [...res.data] });
-          this.setState({ tuesdayRooms: [...res.data] });
-          this.setState({ wednesdayRooms: [...res.data] });
-          this.setState({ thursdayRooms: [...res.data] });
-          this.setState({ fridayRooms: [...res.data] });
-          this.setState({ saturdayRooms: [...res.data] });
+          this.setState({ totalNumberOfProfessionals: res.data.length });
         }
       })
-      .catch((err) => console.log(err));      
-  };
+      .catch((err) => console.log(err));
+    RoomService.getAllRooms()
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({ totalNumberOfRooms: res.data.length });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 
   render() {
     return (
