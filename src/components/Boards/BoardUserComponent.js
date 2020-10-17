@@ -5,6 +5,8 @@ import ProfessionalService from "../../services/ProfessionalService";
 import RoomService from "../../services/RoomService";
 import "./BoardUserCss.css";
 import ScheduleTable from "../DataTable/ScheduleTable";
+import SnackBar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton'
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -19,7 +21,9 @@ export default class BoardUser extends Component {
       fridayRooms: [],
       saturdayRooms: [],
       totalNumberOfProfessionals: "",
-      totalNumberOfRooms: ""
+      totalNumberOfRooms: "",
+      snackBarOpen: false,
+      snackBarMessage: "Não há salas suficientes!"
     };
   }
 
@@ -44,6 +48,10 @@ export default class BoardUser extends Component {
     );
   }
 
+  snackBarClose = (event) => {
+    this.setState({snackBarOpen:false});
+  }
+
   generateSchedule = () => {
     this.fetchNumberOfRoomsAndProfessionals();
     let totalProfessionals = this.state.totalNumberOfProfessionals;
@@ -63,8 +71,7 @@ export default class BoardUser extends Component {
         })
         .catch((err) => console.log(err));
     } else {
-      console.log("there are more professionals than rooms!");
-
+      this.setState({snackBarOpen:true})
     }
   };
 
@@ -100,6 +107,18 @@ export default class BoardUser extends Component {
             >
               Gerar escala
             </button>
+            <SnackBar
+              anchorOrigin={{vertical:'top', horizontal:'center'}}
+              open={this.state.snackBarOpen}
+              autoHideDuration= {3000}
+              onClose={this.snackBarClose}
+              message={<span id="message-id">{this.state.snackBarMessage}</span>}
+              action={[<IconButton 
+                key="close"
+                arial-label="Close"
+                color="inherit"
+                onClick={this.snackBarClose}>x</IconButton>]}
+                />
           </div>
         </div>
         <ScheduleTable
