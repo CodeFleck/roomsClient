@@ -63,11 +63,6 @@ export default class BoardUser extends Component {
         .then((res) => {
           if (res.status === 200) {
             this.setState({ mondayRooms: [...res.data] });
-//            this.setState({ tuesdayRooms: [...res.data] });
-//            this.setState({ wednesdayRooms: [...res.data] });
-//            this.setState({ thursdayRooms: [...res.data] });
-//            this.setState({ fridayRooms: [...res.data] });
-//            this.setState({ saturdayRooms: [...res.data] });
           }
         })
         .catch((err) => console.log(err));

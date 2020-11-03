@@ -42,9 +42,10 @@ const ProfessionalService = {
     })
   },
 
-  updateAttribute : professional => {
+  updateAttribute : (professional, attribute) => {
+    debugger;
     return axios
-    .patch(API_URL + professional.id, professional, { headers: authHeader() })
+    .patch(API_URL + professional.id + "/" + attribute, professional, { headers: authHeader() })
     .catch((error) => {
       console.log(error);
     })

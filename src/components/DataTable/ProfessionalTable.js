@@ -12,7 +12,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
-import AddIcon from "@material-ui/icons/Add";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Input from "@material-ui/core/Input";
@@ -93,8 +92,9 @@ class ProfessionalTable extends Component {
     const { editProfessional } = this.state;
     editProfessional.requiresSpecialtyRoom = Boolean(!requiresSpecialtyRoom);
     editProfessional.id = id;
+    debugger;
     this.setState({ editProfessional });
-    ProfessionalService.updateAttribute(editProfessional)
+    ProfessionalService.updateAttribute(editProfessional, "requiresSpecialtyRoom")
       .then((res) => {
         if (res.status === 200) {
           let copyOfProfessionals = [...this.state.professionals];
@@ -237,7 +237,7 @@ class ProfessionalTable extends Component {
     editProfessional.dayofweekList = e.target.value;
     editProfessional.id = id;
     this.setState({ editProfessional });
-    ProfessionalService.updateAttribute(editProfessional)
+    ProfessionalService.updateAttribute(editProfessional, "dayofweekList")
       .then((res) => {
         if (res.status === 200) {
           console.log("editDayChange res..." + JSON.stringify(res.data));
