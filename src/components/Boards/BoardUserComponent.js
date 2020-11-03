@@ -59,18 +59,59 @@ export default class BoardUser extends Component {
     let totalRooms = this.state.totalNumberOfRooms;
 
     if (totalRooms >= totalProfessionals) {
-      ScheduleService.generateSchedule()
+      ScheduleService.generateSchedule("Segunda")
         .then((res) => {
           if (res.status === 200) {
             this.setState({ mondayRooms: [...res.data] });
-            this.setState({ tuesdayRooms: [...res.data] });
-            this.setState({ wednesdayRooms: [...res.data] });
-            this.setState({ thursdayRooms: [...res.data] });
-            this.setState({ fridayRooms: [...res.data] });
-            this.setState({ saturdayRooms: [...res.data] });
+//            this.setState({ tuesdayRooms: [...res.data] });
+//            this.setState({ wednesdayRooms: [...res.data] });
+//            this.setState({ thursdayRooms: [...res.data] });
+//            this.setState({ fridayRooms: [...res.data] });
+//            this.setState({ saturdayRooms: [...res.data] });
           }
         })
         .catch((err) => console.log(err));
+
+      ScheduleService.generateSchedule("Terça")
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ tuesdayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err));
+
+      ScheduleService.generateSchedule("Quarta")
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ wednesdayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err));
+
+      ScheduleService.generateSchedule("Quinta")
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ thursdayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err));
+        
+      ScheduleService.generateSchedule("Sexta")
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ fridayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err)); 
+        
+      ScheduleService.generateSchedule("Sábado")
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({ saturdayRooms: [...res.data] });
+          }
+        })
+        .catch((err) => console.log(err));  
+
     } else {
       this.setState({snackBarOpen:true})
     }
@@ -113,7 +154,6 @@ export default class BoardUser extends Component {
               open={this.state.snackBarOpen}
               autoHideDuration= {3000}
               onClose={this.snackBarClose}
-              //message={<span id="message-id">{this.state.snackBarMessage}</span>}
               action={[<IconButton 
                 key="close"
                 arial-label="Close"
