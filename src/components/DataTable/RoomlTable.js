@@ -274,7 +274,7 @@ class RoomTable extends Component {
               className="Button"
               onClick={this.save}
             >
-              <AddIcon />
+              <SaveIcon />
             </Button>
           </MuiPickersUtilsProvider>
         </div>
