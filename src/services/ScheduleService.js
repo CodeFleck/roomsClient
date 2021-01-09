@@ -10,6 +10,14 @@ const ScheduleService = {
         .catch((error) => {
             console.log(error);
         });
+    },
+
+    emailSchedule: async () => {
+        try {
+            return axios.post(API_URL + "email-schedule", null, { headers: authHeader() });
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 export default ScheduleService;
