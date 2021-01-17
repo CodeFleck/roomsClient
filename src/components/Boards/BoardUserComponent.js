@@ -8,6 +8,7 @@ import ScheduleTable from "../DataTable/ScheduleTable";
 import SnackBar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton'
 import { SnackbarContent } from '@material-ui/core';
+import EmailIcon from '@material-ui/icons/Email';
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -24,7 +25,9 @@ export default class BoardUser extends Component {
       totalNumberOfProfessionals: "",
       totalNumberOfRooms: "",
       snackBarOpen: false,
-      snackBarMessage: "Não há salas suficientes!"
+      snackBarMessage: "Não há salas suficientes!",
+      emailSnackBarOpen: false,
+      emailSnackBarMessage: "Agenda enviada por email!"
     };
   }
 
@@ -51,6 +54,10 @@ export default class BoardUser extends Component {
 
   snackBarClose = (event) => {
     this.setState({snackBarOpen:false});
+  }
+
+  emailSnackBarClose = (event) => {
+    this.setState({emailSnackBarOpen:false});
   }
 
   generateSchedule = () => {
@@ -129,6 +136,11 @@ export default class BoardUser extends Component {
       .catch((err) => console.log(err));
   }
 
+  exportSchedule = () => {
+    ScheduleService.emailSchedule();
+    this.setState({emailSnackBarOpen:true})
+  }
+
   render() {
     return (
       <div>
@@ -144,6 +156,13 @@ export default class BoardUser extends Component {
             >
               Gerar escala
             </button>
+            <button
+              type="button"
+              onClick={this.exportSchedule}
+              className="btn btn-primary emailBtn"
+            >
+              <EmailIcon />
+            </button>
             <SnackBar
               anchorOrigin={{vertical:'top', horizontal:'center'}}
               open={this.state.snackBarOpen}
@@ -156,6 +175,19 @@ export default class BoardUser extends Component {
                 onClick={this.snackBarClose}>x</IconButton>]}
                 >
                 <SnackbarContent style={{backgroundColor:'#f44336'}} message={<span id="client-snackbar">{this.state.snackBarMessage}</span>} />
+                </SnackBar>
+                <SnackBar
+              anchorOrigin={{vertical:'top', horizontal:'center'}}
+              open={this.state.emailSnackBarOpen}
+              autoHideDuration= {3000}
+              onClose={this.emailSnackBarClose}
+              action={[<IconButton 
+                key="close"
+                arial-label="Close"
+                color="inherit"
+                onClick={this.emailSnackBarClose}>x</IconButton>]}
+                >
+                <SnackbarContent style={{backgroundColor:'#4caf50'}} message={<span id="client-email-snackbar">{this.state.emailSnackBarMessage}</span>} />
                 </SnackBar>
           </div>
         </div>

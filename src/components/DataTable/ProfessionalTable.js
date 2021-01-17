@@ -50,13 +50,7 @@ class ProfessionalTable extends Component {
     ProfessionalService.getProfessionalById(id)
       .then((res) => {
         if (res.status === 200) {
-          console.log(
-            "Res data ->>> " + JSON.stringify(res.data)
-          );
           this.setState({ editProfessional: res.data });
-          console.log(
-            "EDIT PROFESSIONAL ->>> " + JSON.stringify(this.state.editProfessional)
-          );
         }
       })
       .catch((err) => console.log(err));
@@ -240,7 +234,6 @@ class ProfessionalTable extends Component {
     ProfessionalService.updateAttribute(editProfessional, "dayofweekList")
       .then((res) => {
         if (res.status === 200) {
-          console.log("editDayChange res..." + JSON.stringify(res.data));
           let copyOfProfessionals = [...this.state.professionals];
           let index = copyOfProfessionals.findIndex(
             (x) => x.id === editProfessional.id
